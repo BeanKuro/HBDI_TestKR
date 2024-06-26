@@ -50,7 +50,7 @@ const questions = [
             {label: "A,아이디어를 숙고하기", value: "A"},
             {label: "B.교육용 소프트웨어를 가지고 컴퓨터 이용하기", value: "B"},
             {label: "C.스터디 그룹이나 그룹 토의를 이용하기", value: "C"},
-            {label: "D문제적 및 해결책의 '우아함'을 논의 평가하기", value: "D"},
+            {label: "D.문제적 및 해결책의 '우아함'을 논의 평가하기", value: "D"},
         ]
     },
     {
@@ -136,6 +136,13 @@ const questions = [
     }
 ];
 
+const typeDescriptions = {
+    A: "A 유형 설명: 논리적이고 분석적인 사고를 선호하는 유형입니다.",
+    B: "B 유형 설명: 조직적이고 절차적인 접근을 선호하는 유형입니다.",
+    C: "C 유형 설명: 인간 중심적이고 감성적인 접근을 선호하는 유형입니다.",
+    D: "D 유형 설명: 창의적이고 직관적인 접근을 선호하는 유형입니다."
+};
+
 function loadQuestions() {
     const form = document.getElementById('hbdi-form');
     questions.forEach((question, index) => {
@@ -158,6 +165,19 @@ function calculateResults() {
     const formData = new FormData(form);
     const scores = { A: 0, B: 0, C: 0, D: 0 };
 
+    // 체크 여부 확인
+    let allAnswered = true;
+    questions.forEach(question => {
+        if (!formData.has(`question${question.id}`)) {
+            allAnswered = false;
+        }
+    });
+
+    if (!allAnswered) {
+        alert("모든 질문에 답해 주세요.");
+        return;
+    }
+
     formData.forEach(value => {
         scores[value]++;
     });
@@ -168,7 +188,15 @@ function calculateResults() {
         <p>B 유형: ${scores.B}</p>
         <p>C 유형: ${scores.C}</p>
         <p>D 유형: ${scores.D}</p>
+        <p>${typeDescriptions['A']}</p>
+        <p>${typeDescriptions['B']}</p>
+        <p>${typeDescriptions['C']}</p>
+        <p>${typeDescriptions['D']}</p>
     `;
+}
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 document.addEventListener('DOMContentLoaded', loadQuestions);
